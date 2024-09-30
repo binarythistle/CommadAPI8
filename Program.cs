@@ -15,6 +15,13 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
+// Run migrations at startup
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.Migrate(); // Applies pending migrations
+}
+
 app.UseHttpsRedirection();
 
 app.MapControllers();
